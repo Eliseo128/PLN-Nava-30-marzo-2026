@@ -1,79 +1,90 @@
-# Virtual Assistant: Country Capitals
+# Asistente Virtual: Capitales de Países
 
-## Problem Statement
-
-Create a virtual assistant that can understand natural language queries about the capitals of countries around the world. The assistant should respond to questions like "What is the capital of France?" or "Tell me the capital of Japan" by providing accurate responses in a user-friendly manner.
-
-## Code Explanation
-
-This Python code uses the Natural Language Toolkit (nltk) for tokenizing user queries and a simple dictionary for storing country and capital pairs. The assistant matches user input with known formats and responds accordingly.
-
-### Code
-```python
-import nltk
-from nltk.tokenize import word_tokenize
-
-# Ensure necessary resources are downloaded
-nltk.download('punkt')
-
-# Dictionary of countries and their capitals
-capitals = {
-    'France': 'Paris',
-    'Germany': 'Berlin',
-    'Japan': 'Tokyo',
-    'Italy': 'Rome',
-    'Brazil': 'Brasilia',
-    'India': 'New Delhi',
-    'South Africa': 'Pretoria',
-    'Canada': 'Ottawa',
-    'Australia': 'Canberra',
-    'United Kingdom': 'London'
-}
-
-def get_capital(country):
-    return capitals.get(country, "Sorry, I don't know the capital of that country.")
-
-def main():
-    print("Welcome to the Country Capital Assistant!")
-    while True:
-        question = input("Ask me a question about country capitals (or type 'exit' to quit): ")
-        if question.lower() == 'exit':
-            break
-        tokens = word_tokenize(question)
-        country = ''
-        for token in tokens:
-            # Check if token matches any country
-            if token in capitals:
-                country = token
+class AsistentCapitales:
+    """Clase para gestionar consultas sobre capitales de países."""
+    
+    def __init__(self):
+        """Inicializa el diccionario de capitales."""
+        self.capitales = {
+            'Francia': 'París',
+            'Alemania': 'Berlín',
+            'Japón': 'Tokio',
+            'Italia': 'Roma',
+            'Brasil': 'Brasilia',
+            'India': 'Nueva Delhi',
+            'Sudáfrica': 'Pretoria',
+            'Canadá': 'Ottawa',
+            'Australia': 'Canberra',
+            'Reino Unido': 'Londres'
+        }
+    
+    def tokenizar(self, texto):
+        """
+        Divide el texto en palabras de forma simple.
+        
+        Args:
+            texto (str): El texto a tokenizar
+            
+        Returns:
+            list: Lista de palabras
+        """
+        # Convertir a minúsculas y dividir por espacios
+        palabras = texto.lower().split()
+        # Remover caracteres especiales
+        palabras_limpias = []
+        for palabra in palabras:
+            palabra_limpia = ''.join(c for c in palabra if c.isalnum() or c == ' ')
+            if palabra_limpia:
+                palabras_limpias.append(palabra_limpia)
+        return palabras_limpias
+    
+    def obtener_capital(self, pais):
+        """
+        Obtiene la capital de un país.
+        
+        Args:
+            pais (str): Nombre del país
+            
+        Returns:
+            str: La capital del país o un mensaje de error
+        """
+        return self.capitales.get(pais, "Lo siento, no sé la capital de ese país.")
+    
+    def buscar_pais(self, pregunta):
+        """
+        Busca un país en la pregunta del usuario.
+        
+        Args:
+            pregunta (str): La pregunta del usuario
+            
+        Returns:
+            str: El país encontrado o vacío si no hay coincidencia
+        """
+        palabras = self.tokenizar(pregunta)
+        for palabra in palabras:
+            # Capitalizar primera letra para coincidir con el diccionario
+            palabra_capitalizada = palabra.capitalize()
+            if palabra_capitalizada in self.capitales:
+                return palabra_capitalizada
+        return ''
+    
+    def ejecutar(self):
+        """Inicia el asistente interactivo."""
+        print("¡Bienvenido al Asistente de Capitales!")
+        while True:
+            pregunta = input("Pregúntame sobre capitales de países (o escribe 'salir' para terminar): ")
+            if pregunta.lower() == 'salir':
+                print("¡Hasta luego!")
                 break
-        if country:
-            capital = get_capital(country)
-            print(f'The capital of {country} is {capital}.')
-        else:
-            print("Sorry, I couldn't find a country in your question.")
+            
+            pais = self.buscar_pais(pregunta)
+            if pais:
+                capital = self.obtener_capital(pais)
+                print(f'La capital de {pais} es {capital}.')
+            else:
+                print("Lo siento, no encontré un país en tu pregunta.")
+
 
 if __name__ == '__main__':
-    main()
-```
-
-### Test Examples
-1. **Input**: "What is the capital of France?"  
-   **Output**: "The capital of France is Paris."
-2. **Input**: "Tell me the capital of Japan."  
-   **Output**: "The capital of Japan is Tokyo."
-3. **Input**: "What about Germany?"  
-   **Output**: "The capital of Germany is Berlin."
-4. **Input**: "Can you tell me the capital of Brazil?"  
-   **Output**: "The capital of Brazil is Brasilia."
-5. **Input**: "What is the capital of South Africa?"  
-   **Output**: "The capital of South Africa is Pretoria."
-6. **Input**: "What is the capital of Australia?"  
-   **Output**: "The capital of Australia is Canberra."
-7. **Input**: "Can you tell me the capital of Italy?"  
-   **Output**: "The capital of Italy is Rome."
-8. **Input**: "What is the capital of Canada?"  
-   **Output**: "The capital of Canada is Ottawa."
-9. **Input**: "What is the capital of India?"  
-   **Output**: "The capital of India is New Delhi."
-10. **Input**: "Where is the capital of the United Kingdom?"  
-    **Output**: "The capital of the United Kingdom is London."
+    asistente = AsistentCapitales()
+    asistente.ejecutar()
