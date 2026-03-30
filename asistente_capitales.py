@@ -82,7 +82,7 @@ class AsistentCapitales:
                 capital = self.obtener_capital(pais)
                 print(f'La capital de {pais} es {capital}.')
             else:
-                print("Lo siento, no encontré un país en tu pregunta.")
+                print("Lo siento,  no encontré un país en tu pregunta.")
 
 
 if __name__ == '__main__':
